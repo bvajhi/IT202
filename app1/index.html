@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            #template{
+                display: none;
+            }
+        </style>
+        <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <title>APP1</title>
+    </head>
+    <body>
+    <h1>311 Grafitti Request</h1>
+<div class="panel panel-default hidden" id="template">
+  <div class="panel-heading" id= "head"></div>
+  <div class="panel-body" id="content"></div>
+</div>
+
+        <script>
+            
+            
+            $.get ("https://data.cityofchicago.org/resource/cdmx-wzbz.json?$limit=20", function(responce){
+                
+               // console.log(responce);
+               // $("body").append("<b>Service Req Num&nbsp&nbsp&nbsp<b>Street Address&nbsp&nbsp&nbsp<b>Status<br>")
+                
+                //var cloneOfTemplate=$("#template").clone();
+                  var cloneOfTemplate;
+                  var count=1;
+                  var blue_color=false;
+                $.each(responce,function(i,v){
+                   console.log(v); 
+                    cloneOfTemplate=$("#template").clone();
+                    //$(cloneOfTemplate).removeClass("hidden");
+                   // $("cloneOfTemplate:nth-child(1)).append("v.service_request_number");
+                    $(cloneOfTemplate).children("#head").append(v.service_request_number);
+                   $(cloneOfTemplate).children("#content").append(v.street_address+"<br>"+v.status);
+                   $(cloneOfTemplate).removeClass("hidden");
+                   //$(cloneOfTemplate).css("display","true");
+                   $(cloneOfTemplate).attr("id","clone"+count);
+                   if (!blue_color)
+                   {
+                     $(cloneOfTemplate).children("#head").css("background-color","#7FFFD4");
+                   }
+                   else {
+                       
+                       $(cloneOfTemplate).children("#head").css("background-color","#98FB98");
+                   }
+                  if (count%3==0){
+                      blue_color=!blue_color;
+                  }
+                   $("body").append(cloneOfTemplate);
+                   
+                   count++;
+                });
+            
+                
+            });
+            </script>
+
+    </body>
+</html>
