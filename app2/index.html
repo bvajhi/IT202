@@ -1,120 +1,141 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
     <title>Info windows</title>
     <style>
-      /* Always set the map height explicitly to define the size of the div
+        /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
-      #map {
-        height: 100%;
-      }
-      /* Optional: Makes the sample page fill the window. */
-      html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
-       #template{
-                display: none;
-            }
+
+        #map {
+            height: 100%;
+        }
+
+        /* Optional: Makes the sample page fill the window. */
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #template {
+            display: none;
+        }
     </style>
-    
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
-<!-- jQuery library -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
-<!-- Latest compiled JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  </head>
-  <body>
-     <h1>311 Grafitti Request</h1>
-<div class="panel panel-default hidden" id="template">
-  <div class="panel-heading" id= "head"></div>
-  <div class="panel-body" id="content"></div>
-</div>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <h1>311 Grafitti Request</h1>
+    <input type="text" placeholder="Zip Code" id="zip" />
+    <button type="submit" id="search">Search</button>
+
+    <div class="panel panel-default hidden" id="template">
+        <div class="panel-heading" id="head"></div>
+        <div class="panel-body" id="content"></div>
+    </div>
     <div id="map"></div>
-    
+
+
+
     <script>
-    var map
- function initMap() {
-var chicago = {lat:41.8781, lng:-87.6298};
- map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 10,
-          center:chicago
-        });
- }
-$.get ("https://data.cityofchicago.org/resource/cdmx-wzbz.json?$limit=20", function(responce){
-                
-               // console.log(responce);
-               // $("body").append("<b>Service Req Num&nbsp&nbsp&nbsp<b>Street Address&nbsp&nbsp&nbsp<b>Status<br>")
-                
-                //var cloneOfTemplate=$("#template").clone();
-                  var cloneOfTemplate;
-                  var count=1;
-                  var blue_color=false;
-                $.each(responce,function(i,v){
-                   console.log(v); 
-                    cloneOfTemplate=$("#template").clone();
-                    //$(cloneOfTemplate).removeClass("hidden");
-                   // $("cloneOfTemplate:nth-child(1)).append("v.service_request_number");
-                    $(cloneOfTemplate).children("#head").append(v.service_request_number);
-                   $(cloneOfTemplate).children("#content").append(v.street_address+"<br>"+v.status);
-                   $(cloneOfTemplate).removeClass("hidden");
-                   //$(cloneOfTemplate).css("display","true");
-                   $(cloneOfTemplate).attr("id","clone"+count);
-                   if (!blue_color)
-                   {
-                     $(cloneOfTemplate).children("#head").css("background-color","#7FFFD4");
-                   }
-                   else {
-                       
-                       $(cloneOfTemplate).children("#head").css("background-color","#FFFAFA");
-                   }
-                  if (count%3==0){
-                      blue_color=!blue_color;
-                  }
-                   $("body").append(cloneOfTemplate);
-                   
-                   count++;
-                   
-                   
-          //from here the marker code start
-                
-               
-        var uluru = {lat:parseFloat(v.latitude), lng:parseFloat( v.longitude)};
-        
+        var map
 
-        var contentString ="This is marker";
-
-        var infowindow = new google.maps.InfoWindow({
-          content: contentString
-        });
-
-        var marker = new google.maps.Marker({
-          position: uluru,
-          map: map,
-          title: 'Uluru (Ayers Rock)'
-        });
-        marker.addListener('click', function() {
-          infowindow.open(map, marker);
-        });
-                   
-  });//This is the end of the each loop
-            
-
-      
-                
+        function initMap() {
+            var chicago = { lat: 41.8781, lng: -87.6298 };
+            map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 10,
+                center: chicago
             });
-      // This example displays a marker at the center of Australia.
-      // When the user clicks the marker, an info window opens.
 
-      
+            $.get("https://data.cityofchicago.org/resource/cdmx-wzbz.json?zip_code=" + $("#zip").val(), function(responce) {
+
+                // console.log(responce);
+                // $("body").append("<b>Service Req Num&nbsp&nbsp&nbsp<b>Street Address&nbsp&nbsp&nbsp<b>Status<br>")
+
+                //var cloneOfTemplate=$("#template").clone();
+                var cloneOfTemplate;
+                var count = 1;
+                var blue_color = false;
+                $.each(responce, function(i, v) {
+                    console.log(v);
+                    cloneOfTemplate = $("#template").clone();
+                    //$(cloneOfTemplate).removeClass("hidden");
+                    // $("cloneOfTemplate:nth-child(1)).append("v.service_request_number");
+                    $(cloneOfTemplate).children("#head").append(v.service_request_number);
+                    $(cloneOfTemplate).children("#content").append(v.street_address + "<br>" + v.status);
+                    $(cloneOfTemplate).removeClass("hidden");
+                    //$(cloneOfTemplate).css("display","true");
+                    $(cloneOfTemplate).attr("id", "clone" + count);
+                    if (!blue_color) {
+                        $(cloneOfTemplate).children("#head").css("background-color", "#7FFFD4");
+                    }
+                    else {
+
+                        $(cloneOfTemplate).children("#head").css("background-color", "#FFFAFA");
+                    }
+                    if (count % 3 == 0) {
+                        blue_color = !blue_color;
+                    }
+                    $("body").append(cloneOfTemplate);
+
+                    count++;
+
+
+                    //from here the marker code start
+
+
+                    var uluru = { lat: parseFloat(v.latitude), lng: parseFloat(v.longitude) };
+
+
+                    var contentString = "This is marker";
+
+                    var infowindow = new google.maps.InfoWindow({
+                        content: contentString
+                    });
+
+                    var marker = new google.maps.Marker({
+                        position: uluru,
+                        map: map,
+                        title: 'Uluru (Ayers Rock)'
+                    });
+                    marker.addListener('click', function() {
+                        infowindow.open(map, marker);
+                    });
+
+                }); //This is the end of the each loop
+
+
+
+
+            });
+            // This example displays a marker at the center of Australia.
+            // When the user clicks the marker, an info window opens.
+
+        }
+        var zipToSearch;
+        //  function event(){
+        //      zipToSearch= document.getElementById("zip").
+
+
+        //  }
     </script>
-    <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC6HjMyrwakizaOPTHmv9bUiKAEVyFgMRQ&callback=initMap">
+    <script>
+        $("#search").on("click", initMap)
     </script>
-  </body>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC6HjMyrwakizaOPTHmv9bUiKAEVyFgMRQ">
+    </script>
+</body>
+
 </html>
