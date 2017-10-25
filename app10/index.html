@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title> </title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <canvas id="myCanvas" width=400></canvas>
+
+
+
+    <script>
+     var c=document.getElementById("myCanvas");
+                var ctx=c.getContext("2d");
+                var player= {y:c.height-20,x:50 , color: "red" , radius:20, shape:'circle'};
+                var harm= {y:c.height/2, x:c.width-50, color: "blue", radius: 20,shape:'circle'} 
+                var bene;
+    
+        function draw() {
+             ctx.clearRect(0,0, 400, 150);
+            // update character position properties
+                harm.x --;
+                
+            if (areColliding(player, harm)) {
+                //  set properties
+            }
+            if (areColliding(player, bene)) {
+                //  set properties
+            }
+            if (reachedEdge(harm, 'left')) {
+                
+            // set y property
+            
+            harm.x= c.width
+            }
+
+            drawCharacter(player);
+            drawCharacter(harm);
+           // drawCharacter(bene);
+        requestAnimationFrame(draw);
+       
+        }
+
+        function drawCharacter(character) {
+            switch (character.shape) {
+                case 'circle':
+                    drawCircle(character.x, character.y, character.radius, character.color);
+                    break;
+                case 'square':
+                    // call function to draw square
+                    break;
+                case 'image':
+                    // call function to draw image
+                    break;
+                default:
+                    console.log('character.shape case fell through');
+            
+                
+                
+            }
+        }
+
+        function drawCircle(x, y, radius, color) {
+            //
+                 ctx.beginPath();
+                ctx.arc(x,y,radius,0,2*Math.PI);
+                ctx.fillStyle = color;
+                ctx.fill();
+        }
+
+        function areColliding(character1, character2) {
+            // use 2d collision for circles
+        }
+
+        function reachedEdge(character, edge) {
+            if (edge == 'left' && character.x< 0 )
+                return true;
+        }
+        $(document).ready(function() {
+                    // arrow key keydown event handlers to change player position
+               
+                requestAnimationFrame(draw);
+               
+                });
+    </script>
+    
+</body>
+
+</html>

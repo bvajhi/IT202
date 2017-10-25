@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> </title>
+         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    </head>
+    <body>
+        <canvas id= "myCanvas" width=400></canvas> 
+        
+        
+        
+        <script>
+           var c=document.getElementById("myCanvas");
+                var ctx=c.getContext("2d");
+                var xpos2= c.width;
+                var ypos2= c.height-40;
+            function drawCircle(x ,y){
+                ctx.clearRect(0,0, 400, 150);
+                
+                 var rad = Math.floor(Math.random()*50);
+                 var ypos=  Math.floor(Math.random()*c.height);
+                 var xpos= Math.floor(Math.random()*c.width);
+                 
+                 
+                 
+                ctx.beginPath();
+                ctx.arc(xpos2,ypos2,30,0,2*Math.PI);
+                // ctx.fillStyle = '#'+(Math.random()*0xFFFFFF<<0).toString(16);
+                // ctx.fill();
+                ctx.stroke();
+                xpos2--;
+                
+                console.log(xpos2);
+                if (xpos2< -30)
+                {
+                   xpos2= c.width;
+                }
+                
+                 requestAnimationFrame(drawCircle);
+            }
+            
+            requestAnimationFrame(drawCircle);
+            
+        </script>
+        <script >
+            
+            $("#myCanvas").on("click",function(evt){
+                //drawCircle(evt.clientX,evt.clientY);
+                
+                ctx.clearRect(0,0, 400, 150);
+                
+                
+            });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>app10</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    
+</head>
+
+<body>
+
+<form>
+ <input type="text" id="text"/>
+ <br>
+ <input type="radio" name="location" value="location"> Share Location<br>
+</form>
+
+<script src="https://unpkg.com/dexie@latest/dist/dexie.js"></script>
+    <script>
+        var db = new Dexie("MyDB");
+        db.version(1).stores({ settings: "name,value" });
+        db.on("populate", function() {
+            db.settings.add({ name: "displayName", value:"Display Name" });
+            db.settings.add({name: "shareLocation", value:"False"});
+           db.settings.add ({name: "lastAccessed", value: Date.now()})
+        });
+        db.open();
+        
+      
+    </script>
+
+
+</body>
+
+</html>
