@@ -113,8 +113,13 @@ export default class PaymentAPIWrapper {
     const paymentOptions = {
 
       // TODO Android PAY 8.1 - allow shipping options
+      requestShipping: true,
 
       // TODO Android PAY 10.1 - Add payment options
+   
+requestPayerEmail: true,
+requestPayerPhone: true,
+requestPayerName: true
 
 
     };
@@ -128,8 +133,25 @@ export default class PaymentAPIWrapper {
     let request = new PaymentRequest(supportedInstruments, details, paymentOptions);
 
     // TODO Android PAY 9.1 - add `shippingaddresschange` event handler
+    request.addEventListener('shippingaddresschange', e => {
+  e.updateWith((_ => {
+    // Get the shipping options and select the least expensive
+    shippingOptions = this.optionsForCountry(request.shippingAddress.country);
+    selectedOption = shippingOptions[0].id;
+    let details = this.buildPaymentDetails(cart, shippingOptions, selectedOption);
+    return Promise.resolve(details);
+  })());
+});
 
     // TODO Android PAY 9.2 - add `shippingoptionchange` event handler
+    request.addEventListener('shippingoptionchange', e => {
+  e.updateWith((_ => {
+    selectedOption = request.shippingOption;
+    let details = this.buildPaymentDetails(cart, shippingOptions, selectedOption);
+    return Promise.resolve(details);
+  })());
+});
+
 
     return request;
   }
@@ -153,14 +175,33 @@ export default class PaymentAPIWrapper {
     let total = cart.total;
 
     // TODO Android PAY 8.3 - allow shipping options
+let displayedShippingOptions = [];
+if (shippingOptions.length > 0) {
+  let selectedOption = shippingOptions.find(option => {
+    return option.id === shippingOptionId;
+  });
+  displayedShippingOptions = shippingOptions.map(option => {
+    return {
+      id: option.id,
+      label: option.label,
+      amount: {currency: 'USD', value: String(option.price)},
+      selected: option.id === shippingOptionId
+    };
+  });
+  if (selectedOption) total += selectedOption.price;
+}
+
+
 
     let details = {
       displayItems: displayItems,
       total: {
         label: 'Total due',
         amount: {currency: 'USD', value: String(total)}
-      }
+      },
       // TODO Android PAY 8.2 - allow shipping options
+      
+  shippingOptions: displayedShippingOptions
     };
 
     return details;
